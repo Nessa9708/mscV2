@@ -40,6 +40,27 @@ const [generatedProductName, setGeneratedProductName] = useState('');
 
   }, [alanInstance])
 
+  // Modify the showProducts function to fetch a product name from the serverless function
+const showProducts = useCallback(async () => {
+  try {
+    // Send a request to the Sanity.io custom API route
+    const response = await axios.get('/api/generate-product-name'); // Replace with your Sanity.io custom API route
+
+    // Extract the generated product name from the response
+    const generatedName = response.data.generatedProductName;
+
+    // Set the generated product name
+    setGeneratedProductName(generatedName);
+
+    // Open the URL with the generated product name
+    window.open(`/${generatedName}`, '_top', 'replace:false');
+  } catch (error) {
+    // Handle any errors
+    console.error('Error fetching product name:', error);
+  }
+}, []);
+
+
   const selectRadioButton = useCallback((category) => {
     const event = new CustomEvent(COMMANDS.SELECT_RADIO_BUTTON, { detail: { category } });
     window.dispatchEvent(event);
